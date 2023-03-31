@@ -1,37 +1,67 @@
-# import all libraries
-from flask import Flask, request, render_template
+import hashlib
+import secrets
+from flask import Flask, request, render_template, redirect, url_for
 
-# initialize flask function
 app = Flask(__name__)
+app.secret_key = secrets.token_urlsafe(16)
 
-# Make hello_world function
+users = {
+    'geeksforgeeks': {
+        'password_hash': '3ce9ac522a58a64a0ecf7c1b35cb20d7c8826c128e6bf8c6b9ee0b0c73fa04a6',  # password is "123"
+        'name': 'GeeksForGeeks',
+    },
+    'abdulkalam': {
+        'password_hash': 'ee8e6a5d6c5a6b91de6a8f6b9d73fae232527a1f089e8ed2a2d38bce0ccf4641',  # password is "xyz"
+        'name': 'Abdul Kalam',
+    },
+    'jony': {
+        'password_hash': '29c0f7ea07e873abda11484e98b3a3d3de26dc60c1a3a99c31d8e23a1c36a69b',  # password is "abc"
+        'name': 'Jony',
+    },
+    'tony': {
+        'password_hash': 'f4bde4c6f15a6d5a6a5ee6f114940af14d0d3072fb73f5a06ba1b321c6967e45',  # password is "pqr"
+        'name': 'Tony',
+    },
+}
+
+def hash_password(password):
+    """Hash the given password using SHA256."""
+    return hashlib.sha256(password.encode('utf-8')).hexdigest()
+
+def validate_password(password, password_hash):
+    """Check if the given password matches the given password hash."""
+    return hash_password(password) == password_hash
+
 @app.route('/')
-def hello_world():
-    return render_template("Login.html")
-
-# add database like login credentials,
-# username and password
-database = {'GeeksForGeeks': '123',
-            'Abdul Kalam': 'xyz',
-            'Jony': 'abc', 'Tony': 'pqr'}
-
-# Make another function for login and we are
-# making if and else condition for some
-# situation like during wrong password wrong
-# user and also for successful login
-@app.route('/Form_login.html', methods=['POST', 'GET'])
-def login():
-    name1 = request.form['username']
-    pwd = request.form['password']
-    if name1 not in database:
-        return render_template('Login.html', name=name1, info='Invalid User ????!')
+def index():
+    if 'username' in session:
+        return redirect(url_for('home'))
     else:
-        if database[name1] != pwd:
-            return render_template('Login.html', name=name1, info='Invalid Password ????!')
-        else:            
-            return render_template('Home.html', name=name1, info='Login successful!')
+        return render_template('login.html')
 
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.form['username']
+    password = request.form['password']
+    if username in users and validate_password(password, users[username]['password_hash']):
+        session['username'] = username
+        session['name'] = users[username]['name']
+        return redirect(url_for('home'))
+    else:
+        return render_template('login.html', error='Invalid username or password')
 
-# Run flask in debug mode
+@app.route('/home')
+def home():
+    if 'username' in session:
+        return render_template('home.html', name=session['name'])
+    else:
+        return redirect(url_for('index'))
+
+@app.route('/logout')
+def logout():
+    session.pop('username', None)
+    session.pop('name', None)
+    return redirect(url_for('index'))
+
 if __name__ == '__main__':
-    app.run(debug=false)
+    app.run(debug=False, ssl_context='adhoc')

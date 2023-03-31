@@ -26,18 +26,148 @@
 			vertical-align: top;
 			margin-right: 10px;
 		}
-
 		
+		.container {
+			display: flex;
+			flex-direction: row;
+			height: 100vh;
+			overflow: hidden;
+		}
+		
+		.vert-pane {
+			flex: 1;
+			padding: 10px;
+			border: 1px solid black;
+			overflow-y: scroll;
+		}
+		
+		.vert-pane h2 {
+			text-align: center;
+		}
+		
+		.toolbox-item {
+			border: 1px solid black;
+			padding: 5px;
+			margin: 5px;
+			cursor: move;
+		}
+		
+		.layout-item {
+			border: 1px solid black;
+			padding: 5px;
+			margin: 5px;
+			cursor: move;
+			display: inline-block;
+			width: 30%;
+			height: 100px;
+			text-align: center;
+			vertical-align: middle;
+			line-height: 100px;
+		}
+		
+		#vert-mid {
+			flex: 2;
+			border: 2px dotted black;
+			min-height: 500px;
+			padding: 10px;
+			position: relative;
+		}
+		
+		 .toolbox-item {
+		  display: flex;
+		  align-items: center;
+		  padding: 10px;
+		  border: 1px solid #ccc;
+		  border-radius: 5px;
+		  margin-bottom: 10px;
+		  cursor: move;
+		}
+
+		.toolbox-item img {
+		  width: 30px;
+		  height: 30px;
+		  margin-right: 10px;
+		}
+
+		.toolbox-item span {
+		  font-size: 14px;
+		  font-weight: bold;
+		}	
 
 	</style>
+	
+	<script>
+			  function allowDrop(event) {
+				event.preventDefault();
+			  }
+
+			  function dragStart(event) {
+				event.dataTransfer.setData('text/plain', event.target.id);
+			  }
+
+			  function drop(event) {
+				event.preventDefault();
+				const data = event.dataTransfer.getData('text/plain');
+				const element = document.getElementById(data).cloneNode(true);
+				element.id = data + '_' + new Date().getTime(); // add timestamp to make it unique
+				element.setAttribute('draggable', false); // make the new element un-draggable
+				event.target.appendChild(element);
+			  }
+	</script>
 </head>
 <body>
 	
 	<h1 class="right">Welcome <strong class="str">{{name}}!</strong></h1>
 	<img src="https://raw.githubusercontent.com/shamreennus/PDT_Test_1/master/UI/HTML_CSS_JSP/AEM_Icon.png" 
-		alt="AEM Icon" height="80" width="200">
+		alt="AEM Icon" height="90" width="200">
 	<br/> <hr/>	
 	<a class="btn right" href="/{{ link }}">Logout</a>
+	
+	<div class="container">
+		<div class="vert-pane" id="vert-left">
+		
+			<h2>Utilities</h2>
+			
+			
+			<div class="toolbox-item" id="textbox" draggable="true" ondragstart="dragStart(event)">
+				<img src="{{ url_for('static', filename='images/textbox-icon.png') }}" alt="Textbox Icon">
+				<span>Textbox</span>
+			</div>
+			
+			<div class="toolbox-item" id="label" draggable="true" ondragstart="dragStart(event)">
+			  <img src="{{ url_for('static', filename='images/label-icon.png') }}" alt="Label Icon">
+			  <span>Label</span>
+			</div>
+			
+			<div class="toolbox-item" id="radio" draggable="true" ondragstart="dragStart(event)">
+			  <img src="{{ url_for('static', filename='images/radio-icon.png') }}" alt="Radio Icon">
+			  <span>Radio Button</span>
+			</div>
+			
+			<div class="toolbox-item" id="dropdown" draggable="true" ondragstart="dragStart(event)">
+			  <img src="{{ url_for('static', filename='images/dropdown-icon.png') }}" alt="Dropdown Icon">
+			  <span>Drop-down Box</span>
+			</div>
+			
+			<div class="toolbox-item"  id="image" draggable="true" ondragstart="dragStart(event)">
+			  <img src="{{ url_for('static', filename='images/image-icon.png') }}" alt="Image Icon">
+			  <span>Image</span>
+			</div>
+			
+			<div class="toolbox-item"  id="file" draggable="true" ondragstart="dragStart(event)">
+			  <img src="{{ url_for('static', filename='images/file-icon.png') }}" alt="File Upload Icon">
+			  <span>File Upload</span>
+			</div>
+
+		</div>
+		
+		<div class="vert-pane" id="vert-mid" ondragover="allowDrop(event)" ondrop="drop(event)">
+			<h2>Design Your Web Application Here</h2>
+			<div id="dropzone"></div>
+		</div>
+		
+	  
+</div>
 
 </body>
 </html>

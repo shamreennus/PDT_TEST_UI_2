@@ -24,13 +24,11 @@
 	     make sure that each HTML page contains an element with configured ID,
 		 design requires a placeholder to be present in each page,dynamically insert a footer-->
     <div>
-        <h1>Login</h1>
-		
+        <h1>Login</h1>		
 		
 		{% if info %}
 		<div id='testprod' style='color:red;'>{{ info }}</div>
 		{% endif %}
-
 
 		<br/>
 		<!-- Add the "required" attribute to enforce input validation on the client side -->
@@ -41,10 +39,8 @@
 			<label for="password">Password   </label>  <input type="password" id="password" name="password" required><br/>
 
 			<hr color='white' />
-			<button type="submit" id="loginBtn">Login</button>
-			
-        </form>
-        <!-- <p>Don't have an account? <a href="./Signup.html">Signup</a></p> -->
+			<button type="submit" id="loginBtn">Login</button>			
+        </form>        
 		<p>Don't have an account? Request for Free trial!! </p>
     </div>
     <!-- Make sure any JavaScript code that handles user input is properly secured against injection attacks such as XSS -->

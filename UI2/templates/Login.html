@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Adobe Experience Manager - Login Page</title>
+    <!-- Ignored vulnerability while scanning, 
+	Use a relative path for the image file to make the code more portable -->
+     <img src="https://raw.githubusercontent.com/shamreennus/PDT_Test_1/master/UI/HTML_CSS_JSP/AEM_Icon.png" alt="AEM Icon" height="250" width="500" />
+     
+	 <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <!-- Make sure the included file (header.jsp) is properly secured against injection attacks such as XSS -->
+        <!-- <jsp:include page="..." /> includes the page on the file, 
+		      when the content is being served to the user.
+              Instead use <%@ include file="..." %>
+			  includes the file in the JSP servlet translation phase  
+         -->
+		<jsp:include page="./header.jsp"/>
+    </header>
+    
+	<!-- Ignored vulnerability while scanning , 
+	     make sure that each HTML page contains an element with configured ID,
+		 design requires a placeholder to be present in each page,dynamically insert a footer-->
+    <div>
+        <h1>Login</h1>
+		
+		
+		{% if info %}
+		<div id='testprod' style='color:red;'>{{ info }}</div>
+		{% endif %}
+
+
+		<br/>
+		<!-- Add the "required" attribute to enforce input validation on the client side -->
+			
+		<form action="./Form_login.html" method="post">
+			<label for="username">Username </label><input type="text" id="username" name="username" required><br/>
+			<hr color='white' />
+			<label for="password">Password   </label>  <input type="password" id="password" name="password" required><br/>
+
+			<hr color='white' />
+			<button type="submit" id="loginBtn">Login</button>
+			
+        </form>
+        <!-- <p>Don't have an account? <a href="./Signup.html">Signup</a></p> -->
+		<p>Don't have an account? Request for Free trial!! </p>
+    </div>
+    <!-- Make sure any JavaScript code that handles user input is properly secured against injection attacks such as XSS -->
+    <script src="script.js"></script>
+</body>
+</html>

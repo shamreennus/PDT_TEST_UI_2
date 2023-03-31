@@ -34,4 +34,4 @@ def login():
 
 # Run flask in debug mode
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run()
